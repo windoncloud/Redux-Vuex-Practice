@@ -1,44 +1,44 @@
-class Vue {
-  constructor(options ={}){
-    this.$el = document.querySelector(options.el)
-    let data = this.data = options.data
-    // 代理data，使其能直接this.xxx的方式访问data,一般需要用this.data.xxx
-    Object.keys(data).forEach((key) => {
+class Vue{
+  constructor(options = {}){
+    this.$el = document.querySelector(options.el);
+    let data = this.data = options.data;
+    // 代理data，使其能直接this.xxx的方式访问data，正常的话需要this.data.xxx
+    Object.keys(data).forEach((key)=> {
       this.proxyData(key);
-    })
+    });
     this.methods = options.methods // 事件方法
-    this.watcherTask = {} // 需要监听的任务列表
-    this.observer(data) // 初始化劫持监听所有数据
-    this.compile(this.$el) // 解析dom
+    this.watcherTask = {}; // 需要监听的任务列表
+    this.observer(data); // 初始化劫持监听所有数据
+    this.compile(this.$el); // 解析dom
   }
-  proxyData(key) {
-    let that = this
+  proxyData(key){
+    let that = this;
     Object.defineProperty(that, key, {
       configurable: false,
       enumerable: true,
       get () {
-        return that.data(key)
+        return that.data[key];
       },
       set (newVal) {
-        that.data[key] = newVal
+        that.data[key] = newVal;
       }
-    })
+    });
   }
-  observer(data) {
+  observer(data){
     let that = this
-    Object.keys(data).forEach(key => {
+    Object.keys(data).forEach(key=>{
       let value = data[key]
       this.watcherTask[key] = []
-      Object.defineProperty(data, key, {
+      Object.defineProperty(data,key,{
         configurable: false,
         enumerable: true,
-        get() {
+        get(){
           return value
         },
-        set(newValue) {
-          if(newValue !== value) {
+        set(newValue){
+          if(newValue !== value){
             value = newValue
-            this.watcherTask[key].forEach(task => {
+            that.watcherTask[key].forEach(task => {
               task.update()
             })
           }
