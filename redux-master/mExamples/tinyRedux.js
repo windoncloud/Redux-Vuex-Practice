@@ -100,6 +100,7 @@ var fEnhancer = function ({getState, dispatch}) {
       console.log('this is fEnhancer before', getState())
       console.log('action:', args[0])
       var r = originF(...args)
+      console.log('r', r)
       console.log('this is fEnhancer after', getState())
       return r
     }
@@ -210,9 +211,9 @@ const crs = bindActionCreators({
 }, store.dispatch)
 
 crs.addOne()
-crs.cnum(3)
-crs.addOne()
-
-crs.older()
-crs.byebyeOlder()
+// crs.cnum(3)
+// crs.addOne()
+//
+// crs.older()
+// crs.byebyeOlder()
 
